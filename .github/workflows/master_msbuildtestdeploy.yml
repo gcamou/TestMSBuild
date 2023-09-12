@@ -40,7 +40,7 @@ jobs:
       uses: actions/upload-artifact@v1.0.0
       with:
         name: EZRepBundle
-        path: "./_build"
+        path: "./Publish"
     
     - name: Publish Artifacts to Azure
       uses: Azure/webapps-deploy@v2
@@ -48,4 +48,4 @@ jobs:
         app-name: 'MSBuildTestDeploy'
         slot-name: 'Production'
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_AD24D2542F8A410B969F39BEC0385946 }}
-        package: "./_build"
+        package: "./Publish"
