@@ -35,8 +35,7 @@ jobs:
 
     - name: Build Solution
       run: |
-        msbuild.exe TestDeployMSBuildApp.sln /p:configuration="Release" /p:PackageOutputPath=".\publish"
-        
+        msbuild.exe TestDeployMSBuildApp.sln /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="./Publish"        
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
