@@ -3,6 +3,14 @@
 
 name: Build and deploy ASP.Net Core app to Azure Web App - MSBuildTestDeploy
 
+env:
+  AZURE_WEBAPP_NAME: MSBuildTestDeploy
+  PUBLISH_PATH: './publish/'
+  NUGET_CONFIG_PATH: './CARM Online/nuget.config'
+  SOLUTION: './TestDeployMSBuildApp.sln'
+  PLATFORM: 'any cpu'
+  CONFIGURATION: 'release'
+
 on:
   push:
     branches:
@@ -24,28 +32,23 @@ jobs:
       with:
         nuget-version: 4.4.1
       
-    - name: Navigate to Workspace
-      run: cd $GITHUB_WORKSPACE
-
-    - name: Create Build Directory
-      run: mkdir _build
-      
     - name: Restore Packages
-      run: nuget restore TestDeployMSBuildApp.sln
+      run: nuget restore "${{ env.SOLUTION }}"
 
     - name: Build Solution
       run: |
-        msbuild.exe TestDeployMSBuildApp.sln /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="./Publish"        
+        msbuild.exe "${{ env.SOLUTION }}" /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="${{ env.PLATFORM }}" /p:configuration="${{ env.CONFIGURATION }}" /p:PublishUrl="${{ env.PUBLISH_PATH }}"      
+        
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
         name: EZRepBundle
-        path: "./Publish"
+        path: "${{ env.PUBLISH_PATH }}"
     
     - name: Publish Artifacts to Azure
       uses: Azure/webapps-deploy@v2
       with:
-        app-name: 'MSBuildTestDeploy'
+        app-name: "${{ env.AZURE_WEBAPP_NAME }}"
         slot-name: 'Production'
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_AD24D2542F8A410B969F39BEC0385946 }}
-        package: "./Publish"
+        package: "${{ env.PUBLISH_PATH }}"  
