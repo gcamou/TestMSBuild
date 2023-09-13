@@ -1,5 +1,4 @@
-﻿using dllMSBUildTest;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,7 +11,6 @@ namespace TestDeployMSBuildApp
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            Class1 c = new Class1();
         }
     }
 }

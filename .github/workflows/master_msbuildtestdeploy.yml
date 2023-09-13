@@ -11,7 +11,6 @@ env:
   PLATFORM: 'any cpu'
   CONFIGURATION: 'release'
 
-
 on:
   push:
     branches:
